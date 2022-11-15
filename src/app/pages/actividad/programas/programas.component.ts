@@ -54,10 +54,33 @@ export class ProgramasComponent implements OnInit {
       }
     }).catch(err => {});
   }
-
+  openModalEdit(item: any): any {
+    const modal = this.modalService.open(FormModalComponent, {
+      size: 'lg',
+      keyboard: false,
+      backdrop: 'static'
+    });
+    modal.componentInstance.proId = item.proId;
+    modal.componentInstance.item = item;
+    modal.componentInstance.title = 'Modificar';
+    modal.result.then(res => {
+      if (res.success) {
+        this.getProgramas();
+        //swal.fire('Empleado',`${res.message}`, 'success')
+        Swal.fire({
+          title: 'Editar',
+          text: `${res.message}`,
+          icon: 'success',
+          confirmButtonColor: '#7f264a',
+          timer: 1500
+        });
+      }
+    }).catch(res => {
+    });
+  }
   public onDelete(item: any): void {
-    const ID = item.pro_id;
-    const mensaje = '¿ Desea eliminar? : ' + ' ' + item.pro_nombre;
+    const ID = item.proId;
+    const mensaje = '¿ Desea eliminar? : ' + ' ' + item.proNombre;
     if (ID) {
       Swal.fire({
         title: 'Se eliminará el registro',

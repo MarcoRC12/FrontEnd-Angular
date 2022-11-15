@@ -10,8 +10,11 @@ import {ProgramaService} from "../../../../providers/services/programa.service";
 })
 export class FormModalComponent implements OnInit {
 
+
   @Input() title: any;
-  //@ts-ignore
+  @Input() proId: any;
+  @Input() item: any;
+    //@ts-ignore
   frmPrograma: FormGroup;
   constructor( public activeModal: NgbActiveModal,
                private formBuilder:FormBuilder,
