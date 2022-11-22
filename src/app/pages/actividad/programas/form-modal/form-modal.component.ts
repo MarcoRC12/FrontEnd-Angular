@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ProgramaService} from "../../../../providers/services/programa.service";
 
 @Component({
@@ -18,17 +18,20 @@ export class FormModalComponent implements OnInit {
   frmPrograma: FormGroup;
   constructor( public activeModal: NgbActiveModal,
                private formBuilder:FormBuilder,
-               private programaService: ProgramaService,
+               private programaService: ProgramaService
   ) { }
 
   ngOnInit(): void {
     this.formInit(); //el formulario esta inicializado
+    if(this.item){
+    this.updateData();
+    }
   }
 
   formInit(): void {
     const controls = {
-      proNombre: [''],
-      proDescripcion: ['']
+      proNombre: ['', [Validators.required]],
+      proDescripcion: ['', [Validators.required]]
 
     };
     this.frmPrograma= this.formBuilder.group(controls);// construir formulario
@@ -40,5 +43,15 @@ export class FormModalComponent implements OnInit {
         this.activeModal.close({success: true, message: response.message});
       }
     });//serializa y envia formato tipo JS
+  }
+  update(): void {
+    this.programaService.update$(this.proId, this.frmPrograma.value).subscribe(response => {
+      if (response.success) {
+        this.activeModal.close({success: true, message:response.message});
+      }
+    });
+  }
+  updateData(): void{
+    this.frmPrograma.patchValue(this.item);
   }
 }
